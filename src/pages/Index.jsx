@@ -1,18 +1,12 @@
-import axios from "axios"
 import { useEffect, useState } from "react";
+import { fetchUsers } from '../utils/api';
 
 const Index = () => {
 
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        getUsers();
+        fetchUsers().then(data => setUsers(data));
     }, []);
-
-    function getUsers() {
-        axios.get('http://localhost:80/api/user/').then(function(response) {
-            setUsers(response.data);
-        });
-    }
 
     return (
         <div>
