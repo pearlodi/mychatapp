@@ -11,7 +11,7 @@ const Index = () => {
     return (
         <div>
             <h1>
-            list of names in the database
+            list of names in the database to fetch
             </h1>
                     {users.map((user, key) =>
                         <div key={key}>
