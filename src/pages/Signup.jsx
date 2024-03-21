@@ -1,42 +1,64 @@
 import { useState } from "react";
-import axios from 'axios'
+import { addUser } from "../services/reducers/UserReducer";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 const Signup = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState({})
+  // const users = useSelector((state) => state.users); 
 
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setInputs({...inputs, [name]: value })
-  }
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios.post('http://localhost:80/api/user.save', inputs).then(function(response){
-      console.log(response.data);
-      navigate('/');
-    }); 
-  }
   
+    try {
+      // Make API request
+      const response = await axios.post('http://localhost:80/api/user.save', {
+        firstName,
+        lastName,
+        userName,
+        email,
+        password
+      });
+  
+      console.log(response.data);
+  
+      // Dispatch addUser action with the response data to update Redux store
+      dispatch(addUser(response.data));
+  
+      // Assuming you're using React Router, navigate to a different route
+      navigate('/');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Handle error here, show error message to user, etc.
+    }
+  };
   return (
-    <div className="flex flex-col h-full justify-center items-center">
-        <h1>Signup</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col mt-8 w-[400px]">
+    <div>
+          <form onSubmit={handleSubmit}  className="flex flex-col mt-8 w-[400px]">
         <label>First Name:</label>
-        <input type="text"  name="firstName" onChange={handleChange} className="border border-[black] w-full"/>
+        <input type="text" onChange={(e => setFirstName(e.target.value))}  name="firstName"  className="border border-[black] w-full"/>
 
         <label className="mt-2">Last Name:</label>
-        <input type="text" name="lastName" onChange={handleChange} className="border border-[black] w-full"/>
+        <input onChange={(e => setLastName(e.target.value))} type="text" name="lastName"  className="border border-[black] w-full"/>
 
         <label className="mt-2">User Name:</label>
-        <input type="text" name="userName" onChange={handleChange} className="border border-[black] w-full"/>
+        <input onChange={(e => setUserName(e.target.value))} type="text" name="userName"  className="border border-[black] w-full"/>
 
         <label className="mt-2">Email:</label>
-        <input type="text" name="email" onChange={handleChange} className="border border-[black] w-full"/>
+        <input onChange={(e => setEmail(e.target.value))} type="text" name="email"  className="border border-[black] w-full"/>
 
         <label className="mt-2">Password:</label>
-        <input type="text" name="password" onChange={handleChange} className="border border-[black] w-full"/>
+        <input onChange={(e => setPassword(e.target.value))} type="text" name="password"  className="border border-[black] w-full"/>
 
          <button className="bg-[black] w-full text-white mt-2">save</button>
       </form> 

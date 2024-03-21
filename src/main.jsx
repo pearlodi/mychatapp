@@ -1,29 +1,23 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
-// import App from './App.jsx'
-import Index from './pages/Index';
-import Signup from './pages/Signup';
-import './css/main.css'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+// import { Provider } from 'react-redux'
+// import store from './store'
+import App from './App'
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import UserReducer from './services/reducers/UserReducer'
 
 
-const router = createBrowserRouter([
-{
-  path: '/',
-  element: <Index />,
-  errorElement: <div>404 not found</div>
-},
-{
-  path: '/signup',
-  element: <Signup />
-}
-]);
+const store = configureStore({
+  reducer: {
+    users: UserReducer
+  }
+})
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-      <RouterProvider router={router} />
-  </React.StrictMode>,
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
 )
+
+ 
