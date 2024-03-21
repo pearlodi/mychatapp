@@ -1,27 +1,30 @@
-import { useEffect, useState } from "react";
+import  { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsers } from '../utils/api';
+import { setUser } from '../services/reducers/UserReducer'; 
 
 const Index = () => {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users); 
 
-    const [users, setUsers] = useState([]);
-    useEffect(() => {
-        fetchUsers().then(data => setUsers(data));
-    }, []);
+  useEffect(() => {
+    fetchUsers().then(data => {
+      dispatch(setUser(data));
+    }).catch(error => {
+      console.error('Error fetching users:', error);
+    });
+  }, [dispatch]); 
 
-    return (
-        <div>
-            <h1>
-            databaselist
-            </h1>
-                    {users.map((user, key) =>
-                        <div key={key}>
-                            <ul>
-                            <li>{user.first_name}</li>
-                            </ul>
-                        </div>
-                    )}
+  return (
+    <div>
+      {users.map((user, index) => (
+        <div key={index}>
+          <p>{user.first_name}</p>
         </div>
-    )
-}
+      ))}
+    </div>
+  );
+};
 
-export default Index
+export default Index;
+
