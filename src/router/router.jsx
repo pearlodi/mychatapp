@@ -1,5 +1,6 @@
 import Index from '../pages/Index';
-import Signup from '../pages/Signup';
+import Signup from '../auth/signup/Index';
+
 import '../css/main.css'
 import {
   createBrowserRouter,
